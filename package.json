@@ -15,7 +15,9 @@
     "dev:full": "npm run dev",
     "build:vercel": "npm --prefix frontend run build",
     "build": "npm --prefix frontend run build && npm --prefix admin-panel run build",
-    "start:backend": "npm --prefix backend run start"
+    "start:backend": "npm --prefix backend run start",
+    "start:prod": "npm --prefix backend run start:prod",
+    "start:server": "npm run start:backend"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
