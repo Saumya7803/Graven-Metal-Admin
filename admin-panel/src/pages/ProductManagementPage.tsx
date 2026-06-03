@@ -277,6 +277,7 @@ export function ProductManagementPage() {
   const pendingCount = products.filter((item) => getModerationLabel(item).label === 'Pending Approval').length;
   const removalCount = products.filter((item) => getModerationLabel(item).label === 'Removal Requested').length;
   const currentFormImage = formPreviewUrl || productForm.existingImageUrl;
+  const isListView = viewMode === 'list';
 
   const approveProduct = async (product: ApiProduct) => {
     setSaving(true);
@@ -425,8 +426,8 @@ export function ProductManagementPage() {
                 </div>
               </section>
 
-              <div className="mt-5 grid gap-5 xl:grid-cols-[1.35fr_0.95fr]">
-                <section className="rounded-[1.75rem] border border-gold/15 bg-[#070c12] p-4 shadow-halo sm:p-5">
+              {isListView ? (
+                <section className="mt-5 rounded-[1.75rem] border border-gold/15 bg-[#070c12] p-4 shadow-halo sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="text-xs uppercase tracking-[0.2em] text-gold">All Products</p>
@@ -594,8 +595,8 @@ export function ProductManagementPage() {
                     ) : null}
                   </div>
                 </section>
-
-                <section className="rounded-[1.75rem] border border-gold/15 bg-[#070c12] p-4 shadow-halo sm:p-5">
+              ) : (
+                <section className="mt-5 rounded-[1.75rem] border border-gold/15 bg-[#070c12] p-4 shadow-halo sm:p-5">
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-xs uppercase tracking-[0.2em] text-gold">{productForm._id ? 'Edit Product' : 'Add Product'}</p>
@@ -606,7 +607,16 @@ export function ProductManagementPage() {
                         <p className="mt-1 text-xs text-zinc-500">New or edited products will be queued for admin approval.</p>
                       ) : null}
                     </div>
-                    <Package className="text-gold" size={20} />
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setViewMode('list')}
+                        className="rounded-xl border border-gold/20 bg-[#0d1218] px-3 py-2 text-xs font-semibold text-zinc-300 hover:border-gold/50 hover:text-white"
+                      >
+                        Back to Products
+                      </button>
+                      <Package className="text-gold" size={20} />
+                    </div>
                   </div>
 
                   <form className="mt-5 space-y-4" onSubmit={submitProduct}>
@@ -793,7 +803,7 @@ export function ProductManagementPage() {
                     </div>
                   </form>
                 </section>
-              </div>
+              )}
             </main>
           </div>
         </div>
