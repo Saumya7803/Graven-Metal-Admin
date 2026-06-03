@@ -509,14 +509,14 @@ export function LivePricesPage() {
                       <button
                         key={row.metal}
                         type="button"
-                        onClick={() => setSelectedMetal(metalName)}
+                        onClick={() => setSelectedMetal(getMetalName(row.metal))}
                         className={`rounded-md border px-3 py-2 text-left text-xs font-semibold transition ${
                           selectedMetal === metalName
                             ? 'border-gold/45 bg-gold/15 text-gold'
                             : 'border-white/10 bg-black/15 text-zinc-300 hover:border-gold/30'
                         }`}
                       >
-                        {metalName}
+                        {row.metal}
                       </button>
                     );
                   })}

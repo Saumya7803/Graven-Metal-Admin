@@ -10,13 +10,10 @@ export type ApiProduct = {
   price: number;
   currency?: string;
   unit?: string;
-<<<<<<< HEAD
-=======
   unitType?: string;
   weightPerUnit?: number;
   moq?: number;
   unitPrice?: number;
->>>>>>> frontend-live/main
   stockQty?: number;
   inStock?: boolean;
   image?: { url?: string; publicId?: string };

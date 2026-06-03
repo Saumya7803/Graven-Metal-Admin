@@ -21,7 +21,7 @@ export const companyDetails = {
 };
 
 export const demoCategories: ApiCategory[] = [
-  { _id: 'cat-copper', name: 'Copper', slug: 'copper', description: 'Conductive copper wire, rods, and cathodes.', productCount: 1 },
+  { _id: 'cat-copper', name: 'Copper', slug: 'copper', description: 'Conductive copper wire, rods, cathodes, bars, and flats.', productCount: 5 },
   { _id: 'cat-steel', name: 'Steel', slug: 'steel', description: 'Hot rolled coils and industrial steel forms.', productCount: 1 },
   { _id: 'cat-aluminium', name: 'Aluminium', slug: 'aluminium', description: 'Primary and secondary aluminium supply.', productCount: 1 },
   { _id: 'cat-brass', name: 'Brass', slug: 'brass', description: 'Precision brass rods, tubes, and sheets.', productCount: 1 },
@@ -46,12 +46,9 @@ export const demoProducts: ApiProduct[] = [
     price: 62,
     currency: 'INR',
     unit: 'kg',
-<<<<<<< HEAD
-=======
     unitType: 'Coil',
     weightPerUnit: 15,
     moq: 2,
->>>>>>> frontend-live/main
     stockQty: 400,
     inStock: true,
     image: { url: demoProductImageByCategory.steel },
@@ -65,12 +62,9 @@ export const demoProducts: ApiProduct[] = [
     price: 245,
     currency: 'INR',
     unit: 'kg',
-<<<<<<< HEAD
-=======
     unitType: 'Ingot',
     weightPerUnit: 20,
     moq: 10,
->>>>>>> frontend-live/main
     stockQty: 220,
     inStock: true,
     image: { url: demoProductImageByCategory.aluminium },
@@ -84,12 +78,9 @@ export const demoProducts: ApiProduct[] = [
     price: 540,
     currency: 'INR',
     unit: 'kg',
-<<<<<<< HEAD
-=======
     unitType: 'Rod',
     weightPerUnit: 18,
     moq: 5,
->>>>>>> frontend-live/main
     stockQty: 95,
     inStock: true,
     image: { url: demoProductImageByCategory.brass },
@@ -103,12 +94,9 @@ export const demoProducts: ApiProduct[] = [
     price: 58,
     currency: 'INR',
     unit: 'kg',
-<<<<<<< HEAD
-=======
     unitType: 'Bar',
     weightPerUnit: 12,
     moq: 25,
->>>>>>> frontend-live/main
     stockQty: 500,
     inStock: true,
     image: { url: demoProductImageByCategory.iron },
@@ -122,13 +110,74 @@ export const demoProducts: ApiProduct[] = [
     price: 805,
     currency: 'INR',
     unit: 'kg',
-<<<<<<< HEAD
-=======
     unitType: 'Sheet',
     weightPerUnit: 10,
     moq: 5,
->>>>>>> frontend-live/main
     stockQty: 140,
+    inStock: true,
+    image: { url: demoProductImageByCategory.copper },
+    category: { _id: categoryMap.copper._id, name: categoryMap.copper.name, slug: categoryMap.copper.slug },
+  },
+  {
+    _id: 'prd-copper-wire-rods',
+    name: 'Copper Wire Rods',
+    slug: 'copper-wire-rods',
+    description: 'High-conductivity copper wire rods for electrical and fabrication work.',
+    price: 825,
+    currency: 'INR',
+    unit: 'kg',
+    unitType: 'Rod',
+    weightPerUnit: 10,
+    moq: 5,
+    stockQty: 180,
+    inStock: true,
+    image: { url: demoProductImageByCategory.copper },
+    category: { _id: categoryMap.copper._id, name: categoryMap.copper.name, slug: categoryMap.copper.slug },
+  },
+  {
+    _id: 'prd-copper-bus-bars',
+    name: 'Copper Bus Bars',
+    slug: 'copper-bus-bars',
+    description: 'Precision copper bus bars for power distribution assemblies.',
+    price: 845,
+    currency: 'INR',
+    unit: 'kg',
+    unitType: 'Bar',
+    weightPerUnit: 8,
+    moq: 5,
+    stockQty: 120,
+    inStock: true,
+    image: { url: demoProductImageByCategory.copper },
+    category: { _id: categoryMap.copper._id, name: categoryMap.copper.name, slug: categoryMap.copper.slug },
+  },
+  {
+    _id: 'prd-copper-round-bars',
+    name: 'Copper Round Bars',
+    slug: 'copper-round-bars',
+    description: 'Machining-grade copper round bars for industrial components.',
+    price: 832,
+    currency: 'INR',
+    unit: 'kg',
+    unitType: 'Bar',
+    weightPerUnit: 12,
+    moq: 5,
+    stockQty: 150,
+    inStock: true,
+    image: { url: demoProductImageByCategory.copper },
+    category: { _id: categoryMap.copper._id, name: categoryMap.copper.name, slug: categoryMap.copper.slug },
+  },
+  {
+    _id: 'prd-copper-flats',
+    name: 'Copper Flats',
+    slug: 'copper-flats',
+    description: 'Copper flats for fabrication, earthing, and connector systems.',
+    price: 818,
+    currency: 'INR',
+    unit: 'kg',
+    unitType: 'Flat',
+    weightPerUnit: 10,
+    moq: 5,
+    stockQty: 160,
     inStock: true,
     image: { url: demoProductImageByCategory.copper },
     category: { _id: categoryMap.copper._id, name: categoryMap.copper.name, slug: categoryMap.copper.slug },
@@ -224,9 +273,9 @@ export const demoCompanyStats = [
 ];
 
 export const demoLiveRows = [
-  { metal: 'Copper (1Kg)', unit: '/ Kg', price: 805, change: 1.1 },
-  { metal: 'Iron (TMT)', unit: '/ Ton', price: 52100, change: -0.35 },
-  { metal: 'Steel Coil', unit: '/ Ton', price: 56900, change: 0.43 },
-  { metal: 'Aluminium (1Kg)', unit: '/ Kg', price: 225, change: -0.1 },
-  { metal: 'Brass (1Kg)', unit: '/ Kg', price: 425, change: 0.22 },
+  { metal: 'Copper Wire Rods', unit: '/ Kg', price: 825, change: 1.1 },
+  { metal: 'Copper Cathode Sheets', unit: '/ Kg', price: 805, change: 0.85 },
+  { metal: 'Copper Bus Bars', unit: '/ Kg', price: 845, change: 0.52 },
+  { metal: 'Copper Round Bars', unit: '/ Kg', price: 832, change: -0.12 },
+  { metal: 'Copper Flats', unit: '/ Kg', price: 818, change: 0.34 },
 ];
