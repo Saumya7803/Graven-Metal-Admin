@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
+import { ROLE_DEFAULT_PERMISSIONS } from '../constants/permissions.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 const getJwtSecret = () => {
@@ -83,8 +84,10 @@ export const authorizePermission = (...permissions) => (req, res, next) => {
   if (!req.user) return res.status(401).json({ message: 'Not authorized' });
   if (req.user.role === 'super_admin') return next();
 
-  const userPermissions = req.user.permissions || [];
-  const allowed = permissions.every((p) => userPermissions.includes(p));
+  const rolePermissions = ROLE_DEFAULT_PERMISSIONS[req.user.role] || [];
+  const userPermissions = Array.isArray(req.user.permissions) ? req.user.permissions : [];
+  const effectivePermissions = new Set([...rolePermissions, ...userPermissions]);
+  const allowed = permissions.every((p) => effectivePermissions.has(p));
   if (!allowed) {
     return res.status(403).json({ message: 'Forbidden: missing permission' });
   }

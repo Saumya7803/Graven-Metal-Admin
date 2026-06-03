@@ -225,7 +225,9 @@ export const updateUser = asyncHandler(async (req, res) => {
       user.permissions = ROLE_DEFAULT_PERMISSIONS[role] || [];
     }
   }
-  if (Array.isArray(permissions)) user.permissions = permissions;
+  if (Array.isArray(permissions)) {
+    user.permissions = permissions.length ? permissions : ROLE_DEFAULT_PERMISSIONS[user.role] || [];
+  }
 
   const roleChanged = user.role !== originalRole;
   const permissionsChanged = JSON.stringify(user.permissions || []) !== originalPermissions;
