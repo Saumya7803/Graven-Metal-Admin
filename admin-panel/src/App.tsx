@@ -5,6 +5,9 @@ import { PublicOnlyRoute } from './components/auth/PublicOnlyRoute';
 import { RouteLoader } from './components/ui/RouteLoader';
 
 const AdminPage = lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })));
+const ProductManagementPage = lazy(() =>
+  import('./pages/ProductManagementPage').then((m) => ({ default: m.ProductManagementPage }))
+);
 const SuperAdminPage = lazy(() =>
   import('./pages/SuperAdminPage').then((m) => ({ default: m.SuperAdminPage }))
 );
@@ -49,6 +52,14 @@ const router = createBrowserRouter([
     element: withSuspense(
       <ProtectedRoute allowedRoles={['admin', 'editor', 'super_admin']}>
         <AdminPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin/products',
+    element: withSuspense(
+      <ProtectedRoute allowedRoles={['admin', 'editor', 'super_admin']}>
+        <ProductManagementPage />
       </ProtectedRoute>
     ),
   },

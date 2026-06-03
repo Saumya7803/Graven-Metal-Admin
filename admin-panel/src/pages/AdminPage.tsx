@@ -1568,14 +1568,24 @@ export function AdminPage() {
                   <p className="text-xs uppercase tracking-[0.16em] text-zinc-500">Product Management</p>
                   <h3 className="mt-1 font-display text-2xl text-white">Industrial Product Registry</h3>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => openCreateModal('product')}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-brass to-gold px-4 py-2 text-sm font-semibold text-black shadow-gold"
-                >
-                  <Plus size={15} />
-                  Add Product
-                </button>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/admin/products')}
+                    className="inline-flex items-center gap-2 rounded-lg border border-gold/20 bg-[#0f151e] px-4 py-2 text-sm font-semibold text-zinc-200 hover:border-gold/45 hover:text-gold"
+                  >
+                    Open Full Manager
+                    <Package size={15} className="text-gold" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openCreateModal('product')}
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-brass to-gold px-4 py-2 text-sm font-semibold text-black shadow-gold"
+                  >
+                    <Plus size={15} />
+                    Add Product
+                  </button>
+                </div>
               </div>
 
               <div className="mt-4 grid gap-2 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
