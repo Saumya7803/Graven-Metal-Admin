@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { createHashRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { PublicOnlyRoute } from './components/auth/PublicOnlyRoute';
 import { RouteLoader } from './components/ui/RouteLoader';
@@ -26,7 +26,7 @@ const withSuspense = (element: React.ReactNode) => (
   <Suspense fallback={<RouteLoader />}>{element}</Suspense>
 );
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: '/',
     element: withSuspense(
