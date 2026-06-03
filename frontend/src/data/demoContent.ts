@@ -46,6 +46,12 @@ export const demoProducts: ApiProduct[] = [
     price: 62,
     currency: 'INR',
     unit: 'kg',
+<<<<<<< HEAD
+=======
+    unitType: 'Coil',
+    weightPerUnit: 15,
+    moq: 2,
+>>>>>>> frontend-live/main
     stockQty: 400,
     inStock: true,
     image: { url: demoProductImageByCategory.steel },
@@ -59,6 +65,12 @@ export const demoProducts: ApiProduct[] = [
     price: 245,
     currency: 'INR',
     unit: 'kg',
+<<<<<<< HEAD
+=======
+    unitType: 'Ingot',
+    weightPerUnit: 20,
+    moq: 10,
+>>>>>>> frontend-live/main
     stockQty: 220,
     inStock: true,
     image: { url: demoProductImageByCategory.aluminium },
@@ -72,6 +84,12 @@ export const demoProducts: ApiProduct[] = [
     price: 540,
     currency: 'INR',
     unit: 'kg',
+<<<<<<< HEAD
+=======
+    unitType: 'Rod',
+    weightPerUnit: 18,
+    moq: 5,
+>>>>>>> frontend-live/main
     stockQty: 95,
     inStock: true,
     image: { url: demoProductImageByCategory.brass },
@@ -85,6 +103,12 @@ export const demoProducts: ApiProduct[] = [
     price: 58,
     currency: 'INR',
     unit: 'kg',
+<<<<<<< HEAD
+=======
+    unitType: 'Bar',
+    weightPerUnit: 12,
+    moq: 25,
+>>>>>>> frontend-live/main
     stockQty: 500,
     inStock: true,
     image: { url: demoProductImageByCategory.iron },
@@ -98,6 +122,12 @@ export const demoProducts: ApiProduct[] = [
     price: 805,
     currency: 'INR',
     unit: 'kg',
+<<<<<<< HEAD
+=======
+    unitType: 'Sheet',
+    weightPerUnit: 10,
+    moq: 5,
+>>>>>>> frontend-live/main
     stockQty: 140,
     inStock: true,
     image: { url: demoProductImageByCategory.copper },
