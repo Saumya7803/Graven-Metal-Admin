@@ -62,6 +62,11 @@ const createLeadId = () => {
 export const LEAD_STATUSES = [
   'New',
   'Qualified',
+  'Pricing',
+  'Negotiation',
+  'Follow-Up',
+  'Won',
+  'Lost',
   'Need More Information',
   'Rejected',
   'Assigned To Sales',
@@ -71,10 +76,7 @@ export const LEAD_STATUSES = [
   'Sales Assigned',
   'Follow-up',
   'Quotation Sent',
-  'Negotiation',
   'Order Confirmed',
-  'Won',
-  'Lost',
 ];
 
 const leadSchema = new mongoose.Schema(

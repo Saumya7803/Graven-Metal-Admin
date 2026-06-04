@@ -35,6 +35,24 @@ const procurementModules = new Set([
 
 const recordTeams = new Set(['procurement', 'cct', 'inventory', 'dispatch', 'finance']);
 const recordModulesByTeam = {
+  sales: new Set([
+    'sales-inbox',
+    'leads',
+    'customers',
+    'orders',
+    'tasks',
+    'communication',
+    'quotation-management',
+    'negotiation-tracking',
+    'lead-conversion',
+    'assigned-leads',
+    'customer-management',
+    'rfq-management',
+    'order-management',
+    'follow-ups',
+    'call-notes',
+    'sales-reports',
+  ]),
   procurement: procurementModules,
   cct: new Set([
     'approval-queue',
@@ -73,6 +91,30 @@ function normalizeLeadWorkflowStatus(status) {
   return leadWorkflowStatusLabels[status] || status || 'New';
 }
 
+const salesWorkflowStatusLabels = {
+  New: 'New',
+  Pricing: 'Pricing',
+  Negotiation: 'Negotiation',
+  'Follow-Up': 'Follow-Up',
+  Won: 'Won',
+  Lost: 'Lost',
+  Qualified: 'Pricing',
+  'Assigned To Sales': 'Pricing',
+  'Need More Information': 'Follow-Up',
+  Rejected: 'Lost',
+  'LQT Qualification': 'Pricing',
+  'Buyer Verified': 'Pricing',
+  'Requirement Analyzed': 'Pricing',
+  'Sales Assigned': 'Pricing',
+  'Quotation Sent': 'Negotiation',
+  'Order Confirmed': 'Won',
+  'Follow-up': 'Follow-Up',
+};
+
+function normalizeSalesWorkflowStatus(status) {
+  return salesWorkflowStatusLabels[status] || status || 'New';
+}
+
 function assertTeamAccess(req, team) {
   if (req.user.role === 'super_admin') return null;
   if (req.user.role !== team) return 'Forbidden: team dashboard access denied';
@@ -106,9 +148,9 @@ function formatQuoteRow(quote) {
   };
 }
 
-function formatLeadRow(lead) {
+function formatLeadRow(lead, team = 'lqt') {
   const pendingFollowUp = lead.followUps?.find((item) => item.status === 'pending');
-  const normalizedStatus = normalizeLeadWorkflowStatus(lead.status);
+  const normalizedStatus = team === 'sales' ? normalizeSalesWorkflowStatus(lead.status) : normalizeLeadWorkflowStatus(lead.status);
   return {
     id: lead._id,
     source: 'lead',
@@ -180,7 +222,7 @@ function teamQuoteFilter(team) {
 
 function teamLeadFilter(team) {
   if (team === 'lqt') return { $or: [{ assignedTeam: 'lqt' }, { assignedTeam: '' }, { assignedTeam: { $exists: false } }] };
-  if (team === 'sales') return { assignedTeam: 'sales' };
+  if (team === 'sales') return { $or: [{ assignedTeam: 'sales' }, { status: { $in: ['Pricing', 'Negotiation', 'Follow-Up', 'Won', 'Lost', 'Qualified', 'Assigned To Sales'] } }] };
   return {};
 }
 
@@ -191,8 +233,8 @@ function websiteLeadAnalytics(leads) {
   const needMoreInformation = statuses.filter((status) => status === 'Need More Information').length;
   const rejectedLeads = statuses.filter((status) => status === 'Rejected').length;
   const assignedToSales = statuses.filter((status) => status === 'Assigned To Sales').length;
-  const quotationsSent = leads.filter((lead) => lead.quotation?.status === 'sent').length;
-  const ordersWon = leads.filter((lead) => normalizeLeadWorkflowStatus(lead.status) === 'Assigned To Sales' || lead.order?.status === 'fulfilled').length;
+  const quotationsSent = leads.filter((lead) => lead.quotation?.status === 'sent' || lead.status === 'Quotation Sent').length;
+  const ordersWon = leads.filter((lead) => normalizeSalesWorkflowStatus(lead.status) === 'Won' || lead.order?.status === 'fulfilled').length;
 
   return {
     totalInquiries,
@@ -230,34 +272,39 @@ export const getOperationsDashboard = asyncHandler(async (req, res) => {
     });
   }
 
-  const [quotes, leads, allWebsiteLeads] = await Promise.all([
+  const [quotes, leads, allWebsiteLeads, quotationCount, wonCount] = await Promise.all([
     Quote.find(teamQuoteFilter(team)).sort({ updatedAt: -1 }).limit(200),
     Lead.find(teamLeadFilter(team)).sort({ updatedAt: -1 }).limit(200),
     Lead.find({ source: 'Website' }).select('status assignedTeam quotation.status order.status').lean(),
+    Lead.countDocuments({ source: 'Website', $or: [{ 'quotation.status': 'sent' }, { status: 'Quotation Sent' }] }),
+    Lead.countDocuments({ source: 'Website', $or: [{ status: 'Won' }, { 'order.status': 'fulfilled' }] }),
   ]);
-  const rows = [...leads.map(formatLeadRow), ...quotes.map(formatQuoteRow)].sort(
+  const rows = [...leads.map((lead) => formatLeadRow(lead, team)), ...quotes.map(formatQuoteRow)].sort(
     (a, b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime()
   );
+  const websiteLeadStats = websiteLeadAnalytics(allWebsiteLeads);
+  websiteLeadStats.quotationsSent = quotationCount;
+  websiteLeadStats.ordersWon = wonCount;
+  websiteLeadStats.convertedLeads = wonCount;
+  websiteLeadStats.conversionRate = websiteLeadStats.totalInquiries
+    ? Number(((wonCount / websiteLeadStats.totalInquiries) * 100).toFixed(1))
+    : 0;
   return res.json({
     team,
     rows,
-    websiteLeadStats: websiteLeadAnalytics(allWebsiteLeads),
+    websiteLeadStats,
     counts: {
       quoteStatus: statusCounts(rows, 'quoteStatus'),
       leadTemperature: statusCounts(rows, 'leadTemperature'),
       leadStatus: statusCounts(rows, 'leadStatus'),
     },
     modules: {
-      'new-leads': rows.filter((row) => row.leadStatus === 'New' || row.quoteStatus === 'new').length,
-      'assigned-leads': rows.filter((row) => row.leadStatus === 'Assigned To Sales' || row.assignedTeam === 'sales').length,
-      qualification: rows.filter((row) => row.leadStatus === 'Qualified' || row.quoteStatus === 'in_review').length,
-      'lead-status': rows.filter((row) => row.leadStatus === 'Need More Information' || row.leadStatus === 'Rejected').length,
-      'follow-ups': rows.reduce((sum, row) => sum + row.followUps.filter((item) => item.status === 'pending').length, 0),
-      'call-notes': rows.reduce((sum, row) => sum + row.callNotes.length, 0),
-      'meeting-scheduling': rows.reduce((sum, row) => sum + row.meetings.filter((item) => item.status === 'scheduled').length, 0),
-      'sales-assignment': rows.filter((row) => row.assignedTeam === 'sales').length,
-      'quotation-management': rows.filter((row) => row.quotation?.status === 'sent').length,
-      'order-management': rows.filter((row) => row.order?.status && row.order.status !== 'none').length,
+      'sales-inbox': rows.filter((row) => row.leadStatus === 'New' || row.quoteStatus === 'new').length,
+      leads: rows.filter((row) => ['New', 'Pricing', 'Negotiation', 'Follow-Up'].includes(row.leadStatus || '')).length,
+      customers: rows.filter((row) => row.owner !== 'Unassigned' || row.assignedTeam === 'sales').length,
+      orders: rows.filter((row) => row.leadStatus === 'Won' || (row.order?.status && row.order.status !== 'none')).length,
+      tasks: rows.reduce((sum, row) => sum + row.followUps.filter((item) => item.status === 'pending').length, 0),
+      communication: rows.reduce((sum, row) => row.callNotes.length + row.meetings.length, 0),
     },
   });
 });
@@ -382,7 +429,7 @@ export const createOperationRecord = asyncHandler(async (req, res) => {
   const { team } = req.params;
   const accessError = assertTeamAccess(req, team);
   if (accessError) return res.status(403).json({ message: accessError });
-  const allowedModules = recordModulesByTeam[team] || procurementModules;
+  const allowedModules = team === 'sales' ? recordModulesByTeam.sales : recordModulesByTeam[team] || procurementModules;
   if (!allowedModules.has(req.body.module) && !['customer-management', 'sales-reports'].includes(req.body.module)) {
     return res.status(400).json({ message: 'Invalid operation module' });
   }

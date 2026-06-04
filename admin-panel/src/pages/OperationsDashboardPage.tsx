@@ -178,6 +178,11 @@ const toneClass: Record<Tone, { icon: string; bar: string; chip: string; ring: s
 
 const statusMixClass: Record<string, string> = {
   New: 'bg-gradient-to-r from-sky-500 via-cyan-400 to-blue-300',
+  Pricing: 'bg-gradient-to-r from-amber-500 via-yellow-400 to-orange-300',
+  Negotiation: 'bg-gradient-to-r from-violet-500 via-fuchsia-400 to-pink-300',
+  'Follow-Up': 'bg-gradient-to-r from-emerald-500 via-green-400 to-lime-300',
+  Won: 'bg-gradient-to-r from-emerald-600 via-green-500 to-lime-400',
+  Lost: 'bg-gradient-to-r from-zinc-700 via-red-900 to-red-500',
   Qualified: 'bg-gradient-to-r from-emerald-500 via-green-400 to-lime-300',
   'Need More Information': 'bg-gradient-to-r from-amber-500 via-yellow-400 to-yellow-200',
   Rejected: 'bg-gradient-to-r from-zinc-700 via-red-900 to-red-500',
@@ -396,50 +401,52 @@ const configs: Record<DashboardKind, DashboardConfig> = {
     priorities: ['Verify requirement', 'Validate customer', 'Assign priority', 'Route to sales person'],
   },
   sales: {
-    title: 'CRO Dashboard',
-    eyebrow: 'Customer Relationship Office',
+    title: 'Sales Inbox',
+    eyebrow: 'Sales Team',
     route: '/cro',
-    roleLabel: 'CRO',
+    roleLabel: 'Sales',
     theme: roleThemes.sales,
     primaryColumn: 'Lead',
-    detailColumn: 'Customer Work',
+    detailColumn: 'Sales Work',
     stats: [
-      { label: 'Leads', value: '29', helper: 'Assigned to CRO', icon: Users, tone: 'blue' },
-      { label: 'Customers', value: '14', helper: 'Active accounts', icon: Briefcase, tone: 'gold' },
-      { label: 'Quotations', value: '9', helper: 'Sent this week', icon: FileText, tone: 'green' },
-      { label: 'Orders', value: '5', helper: 'In confirmation', icon: Package, tone: 'violet' },
+      { label: 'Sales Inbox', value: '29', helper: 'New and active leads', icon: Users, tone: 'blue' },
+      { label: 'Leads', value: '24', helper: 'Qualified pipeline', icon: Target, tone: 'gold' },
+      { label: 'Customers', value: '14', helper: 'Customer contact underway', icon: Briefcase, tone: 'green' },
+      { label: 'Orders', value: '5', helper: 'Awaiting confirmation', icon: Package, tone: 'violet' },
     ],
     statuses: [
-      { label: 'Leads', value: 29, tone: 'blue' },
-      { label: 'Customer', value: 14, tone: 'gold' },
+      { label: 'New', value: 29, tone: 'blue' },
+      { label: 'Pricing', value: 14, tone: 'gold' },
       { label: 'Negotiation', value: 8, tone: 'violet' },
-      { label: 'Converted', value: 5, tone: 'green' },
+      { label: 'Follow-Up', value: 6, tone: 'green' },
+      { label: 'Won', value: 5, tone: 'green' },
+      { label: 'Lost', value: 2, tone: 'red' },
     ],
     modules: [
-      { key: 'overview', label: 'Dashboard Overview', icon: BarChart3, metric: '74%', helper: 'Conversion health' },
-      { key: 'assigned-leads', label: 'Leads', icon: Users, metric: '29', helper: 'Assigned leads' },
-      { key: 'customer-management', label: 'Customer', icon: Briefcase, metric: '46', helper: 'Managed accounts' },
-      { key: 'rfq-management', label: 'RFQ Management', icon: ClipboardList, metric: '14', helper: 'Open RFQs' },
-      { key: 'quotation-management', label: 'Quotation Management', icon: FileText, metric: '9', helper: 'Live quotes' },
-      { key: 'negotiation-tracking', label: 'Negotiation Tracking', icon: TrendingUp, metric: '8', helper: 'In negotiation' },
-      { key: 'order-management', label: 'Order Management', icon: Package, metric: '5', helper: 'Pending orders' },
-      { key: 'follow-ups', label: 'Follow-Ups', icon: Phone, metric: '21', helper: 'Buyer touchpoints' },
-      { key: 'sales-reports', label: 'Sales Reports', icon: FileSpreadsheet, metric: '12', helper: 'Report views' },
-      { key: 'lead-conversion', label: 'Lead Conversion Tracking', icon: Target, metric: '18%', helper: 'Lead to order' },
+      { key: 'overview', label: 'Dashboard Overview', icon: BarChart3, metric: '74%', helper: 'Sales workflow health' },
+      { key: 'sales-inbox', label: 'Sales Inbox', icon: UserCheck, metric: '29', helper: 'New qualified items' },
+      { key: 'leads', label: 'Leads', icon: Users, metric: '29', helper: 'Active pipeline' },
+      { key: 'customers', label: 'Customers', icon: Briefcase, metric: '46', helper: 'Contacted customers' },
+      { key: 'orders', label: 'Orders', icon: Package, metric: '5', helper: 'Confirmation stage' },
+      { key: 'tasks', label: 'Tasks', icon: CheckCircle2, metric: '21', helper: 'Follow-ups and actions' },
+      { key: 'communication', label: 'Communication', icon: MessageSquare, metric: '32', helper: 'Calls and messages' },
+      { key: 'quotation-management', label: 'Quotation', icon: FileText, metric: '9', helper: 'Pricing shared' },
+      { key: 'negotiation-tracking', label: 'Negotiation', icon: TrendingUp, metric: '8', helper: 'Commercial negotiation' },
+      { key: 'lead-conversion', label: 'Order Confirmation', icon: Target, metric: '18%', helper: 'Lead to order' },
     ],
     rows: [
-      { account: 'Vertex Components', owner: 'Nikhil', detail: 'Quotation revision for brass rods', status: 'Negotiation', next: 'Price approval today', value: 'Rs 18.4L' },
-      { account: 'Pioneer Infra', owner: 'Ritu', detail: 'RFQ for copper cathode', status: 'RFQ', next: 'Procurement price check', value: 'Rs 42L' },
-      { account: 'Apex Rail Systems', owner: 'Kabir', detail: 'Order confirmation for steel coils', status: 'Order', next: 'Send PI', value: 'Rs 27L' },
-      { account: 'Kavya Electricals', owner: 'Nikhil', detail: 'Customer profile and credit terms', status: 'Assigned', next: 'Discovery call', value: 'Rs 9.8L' },
+      { account: 'Vertex Components', owner: 'Nikhil', detail: 'Quotation revision for brass rods', status: 'Negotiation', next: 'Customer contact today', value: 'Rs 18.4L' },
+      { account: 'Pioneer Infra', owner: 'Ritu', detail: 'Customer contact for copper cathode', status: 'Pricing', next: 'Share quotation', value: 'Rs 42L' },
+      { account: 'Apex Rail Systems', owner: 'Kabir', detail: 'Order confirmation for steel coils', status: 'Won', next: 'Send order confirmation', value: 'Rs 27L' },
+      { account: 'Kavya Electricals', owner: 'Nikhil', detail: 'Pending follow-up and document review', status: 'Follow-Up', next: 'Call back today', value: 'Rs 9.8L' },
     ],
     activity: [
-      'Vertex Components quote moved to negotiation',
-      'Apex Rail Systems purchase intent logged',
-      'Pioneer Infra RFQ sent for supplier pricing',
+      'Vertex Components moved into negotiation',
+      'Apex Rail Systems order confirmation recorded',
+      'Pioneer Infra quotation sent after customer contact',
       'Kavya Electricals follow-up scheduled',
     ],
-    priorities: ['Update negotiation notes', 'Send pending quotations', 'Confirm order terms', 'Review conversion report'],
+    priorities: ['Customer contact', 'Send quotation', 'Track negotiation', 'Confirm orders'],
   },
   procurement: {
     title: 'Procurement Dashboard',
@@ -695,11 +702,11 @@ function StatCard({ stat }: { stat: Metric }) {
 
 function StatusChip({ status }: { status: string }) {
   const tone: Tone =
-    status === 'Hot' || status === 'At Risk' || status === 'Rejected'
+    status === 'Hot' || status === 'At Risk' || status === 'Rejected' || status === 'Lost'
       ? 'red'
-      : status === 'Warm' || status === 'RFQ' || status === 'Requested' || status === 'Need More Information'
+      : status === 'Warm' || status === 'RFQ' || status === 'Requested' || status === 'Need More Information' || status === 'Pricing'
         ? 'gold'
-        : status === 'Approved' || status === 'Order' || status === 'Qualified' || status === 'Assigned To Sales' || status === 'New'
+        : status === 'Approved' || status === 'Order' || status === 'Qualified' || status === 'Assigned To Sales' || status === 'New' || status === 'Follow-Up' || status === 'Won'
           ? 'green'
         : status === 'Negotiation'
             ? 'violet'
@@ -1014,13 +1021,15 @@ function ScorecardWorkspace({ filteredRows, selectedModule, actionBusy, onRowAct
     selectedModule.key === 'cost-analysis'
       ? ['Base rate verified', 'Freight captured', 'Payment terms compared', 'Margin impact checked']
       : selectedModule.key === 'lead-conversion'
-        ? ['Source tracked', 'RFQ created', 'Quote sent', 'Order won']
+        ? ['Customer contacted', 'Quotation sent', 'Negotiation complete', 'Order confirmed']
         : ['Need verified', 'Authority confirmed', 'Budget discussed', 'Timeline captured'];
 
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
       <Panel>
-        <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">Scoring Workspace</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
+          {selectedModule.key === 'lead-conversion' ? 'Order Confirmation Workspace' : 'Scoring Workspace'}
+        </p>
         <h3 className="mt-1 font-display text-2xl text-white">{selectedModule.label}</h3>
         <div className="mt-5 grid gap-3 md:grid-cols-2">
           {filteredRows.map((row, rowIndex) => (
@@ -1260,7 +1269,7 @@ function ProcessWorkspace({
   onOpenForm,
   onOpenNewForm,
 }: WorkspaceProps) {
-  const formButtonLabel = kind === 'sales' ? 'Open CRO form' : kind === 'procurement' ? 'Open price form' : 'Open form';
+  const formButtonLabel = kind === 'sales' ? 'Open Sales form' : kind === 'procurement' ? 'Open price form' : 'Open form';
   return (
     <Panel>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -1289,11 +1298,11 @@ function ProcessWorkspace({
       {kind === 'sales' || kind === 'procurement' ? (
         <div className={`mt-5 rounded-2xl border ${roleClass.borderSoft} ${roleClass.inner} p-4`}>
           <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">
-            {kind === 'sales' ? 'CRO quotation form' : 'Procurement price form'}
+            {kind === 'sales' ? 'Sales inbox form' : 'Procurement price form'}
           </p>
           <p className="mt-2 text-sm text-zinc-300">
             {kind === 'sales'
-              ? 'Capture customer discussion, quotation value, follow-up, and next action in one place.'
+              ? 'Capture customer contact, quotation, negotiation, and the next order step in one place.'
               : 'Capture supplier price, comparison notes, and the next procurement step in one place.'}
           </p>
         </div>
@@ -1387,7 +1396,7 @@ function OperationsFormModal({ kind, row, members, salesMembers, activeModule, b
   const [quotationAmount, setQuotationAmount] = useState('');
   const [handoffToSales, setHandoffToSales] = useState(canHandoffToSales);
   const [leadStatus, setLeadStatus] = useState(
-    row.leadStatus || (kind === 'lqt' ? (canHandoffToSales ? 'Sales Assigned' : 'Qualified') : 'Follow-up')
+    row.leadStatus || (kind === 'lqt' ? (canHandoffToSales ? 'Sales Assigned' : 'Qualified') : 'New')
   );
   const [meetingAt, setMeetingAt] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -1397,13 +1406,13 @@ function OperationsFormModal({ kind, row, members, salesMembers, activeModule, b
   const assignedLabel = handoffToSales ? 'Sales person' : 'Assigned employee';
   const assignedPlaceholder = handoffToSales ? 'Select sales person' : `Select ${kind} employee`;
   const nextStepLabel = kind === 'sales' ? 'Next sales step' : kind === 'procurement' ? 'Next procurement step' : 'Next step';
-  const noteLabel = kind === 'sales' ? 'Customer conversation / call notes' : kind === 'procurement' ? 'Supplier conversation / notes' : 'Work note';
-  const statusLabel = kind === 'sales' ? 'Lead status' : 'Status';
+  const noteLabel = kind === 'sales' ? 'Customer contact / communication notes' : kind === 'procurement' ? 'Supplier conversation / notes' : 'Work note';
+  const statusLabel = kind === 'sales' ? 'Sales stage' : 'Status';
   const valueLabel =
     kind === 'sales'
       ? isQuote
         ? 'Quotation amount (INR)'
-        : 'Quotation value'
+        : 'Quotation / order value'
       : kind === 'procurement'
         ? 'Supplier price / landed cost'
         : 'Value';
@@ -1601,7 +1610,7 @@ function OperationsFormModal({ kind, row, members, salesMembers, activeModule, b
               <span className="text-xs uppercase tracking-[0.14em] text-zinc-500">{statusLabel}</span>
               {isLead ? (
                 <select className={`${inputClass} mt-2`} value={leadStatus} onChange={(event) => setLeadStatus(event.target.value)}>
-                  {['Sales Assigned', 'Follow-up', 'Quotation Sent', 'Negotiation', 'Order Confirmed', 'Won', 'Lost'].map((item) => (
+                  {['New', 'Pricing', 'Negotiation', 'Follow-Up', 'Won', 'Lost'].map((item) => (
                     <option key={item}>{item}</option>
                   ))}
                 </select>
@@ -1678,15 +1687,16 @@ function ModuleWorkspace(props: WorkspaceProps) {
   if (['new-leads', 'customer-management', 'supplier-management'].includes(activeModule)) {
     return <IntakeWorkspace {...props} />;
   }
-  if (activeModule === 'assigned-leads') return <AssignmentWorkspace {...props} />;
-  if (['qualification', 'lead-conversion', 'cost-analysis'].includes(activeModule)) {
+  if (['assigned-leads', 'leads', 'sales-inbox'].includes(activeModule)) return <AssignmentWorkspace {...props} />;
+  if (activeModule === 'customers') return <IntakeWorkspace {...props} />;
+  if (['qualification', 'cost-analysis'].includes(activeModule)) {
     return <ScorecardWorkspace {...props} />;
   }
-  if (['lead-status', 'negotiation-tracking', 'vendor-comparison', 'approval-queue', 'inventory-dashboard', 'dispatch-dashboard', 'invoice-queue'].includes(activeModule)) {
+  if (['lead-status', 'negotiation-tracking', 'vendor-comparison', 'approval-queue', 'inventory-dashboard', 'dispatch-dashboard', 'invoice-queue', 'orders'].includes(activeModule)) {
     return <BoardWorkspace {...props} />;
   }
-  if (['follow-ups', 'supplier-communication'].includes(activeModule)) return <FollowUpWorkspace {...props} />;
-  if (activeModule === 'call-notes') return <NotesWorkspace {...props} />;
+  if (['follow-ups', 'supplier-communication', 'tasks'].includes(activeModule)) return <FollowUpWorkspace {...props} />;
+  if (['call-notes', 'communication'].includes(activeModule)) return <NotesWorkspace {...props} />;
   if (['meeting-scheduling', 'availability-tracking'].includes(activeModule)) return <ScheduleWorkspace {...props} />;
   if (
     [
@@ -1694,6 +1704,7 @@ function ModuleWorkspace(props: WorkspaceProps) {
       'rfq-management',
       'quotation-management',
       'order-management',
+      'lead-conversion',
       'price-requests',
       'purchase-orders',
     ].includes(activeModule)
@@ -1820,15 +1831,30 @@ export function OperationsDashboardPage({ kind }: { kind: DashboardKind }) {
         }
 
         if (kind === 'sales') {
+          if (['sales-inbox', 'leads'].includes(activeModule)) {
+            leadPayload.status = 'Pricing';
+            leadPayload.leadTemperature = 'warm';
+          }
+          if (activeModule === 'customers') {
+            leadPayload.status = 'Follow-Up';
+          }
           if (activeModule === 'quotation-management') {
+            leadPayload.status = 'Negotiation';
             leadPayload.quotation = { amount: 100000, currency: 'INR', status: 'sent' };
           }
-          if (activeModule === 'order-management') {
-            leadPayload.order = { status: 'pending', amount: 100000 };
+          if (activeModule === 'negotiation-tracking') {
+            leadPayload.status = 'Negotiation';
           }
-          if (activeModule === 'follow-ups') {
-            leadPayload.status = 'Follow-up';
-            leadPayload.followUp = { note: 'Sales follow-up logged', dueAt: new Date().toISOString() };
+          if (['orders', 'lead-conversion'].includes(activeModule)) {
+            leadPayload.status = 'Won';
+            leadPayload.order = { status: 'confirmed', amount: 100000 };
+          }
+          if (activeModule === 'tasks') {
+            leadPayload.status = 'Follow-Up';
+            leadPayload.followUp = { note: 'Sales task logged', dueAt: new Date().toISOString() };
+          }
+          if (activeModule === 'communication') {
+            leadPayload.note = 'Sales communication logged';
           }
         }
 
@@ -1856,16 +1882,30 @@ export function OperationsDashboardPage({ kind }: { kind: DashboardKind }) {
         }
 
         if (kind === 'sales') {
+          if (['sales-inbox', 'leads'].includes(activeModule)) {
+            quotePayload.status = 'new';
+            quotePayload.leadTemperature = 'warm';
+          }
+          if (activeModule === 'customers') {
+            quotePayload.followUp = { note: 'Customer contact logged', dueAt: new Date().toISOString() };
+          }
           if (activeModule === 'quotation-management') {
+            quotePayload.status = 'in_review';
             quotePayload.quotation = { amount: 100000, currency: 'INR', status: 'sent' };
           }
-          if (activeModule === 'order-management') {
-            quotePayload.order = { status: 'pending', amount: 100000 };
+          if (activeModule === 'negotiation-tracking') {
+            quotePayload.status = 'in_review';
+            quotePayload.quotation = { amount: 100000, currency: 'INR', status: 'sent' };
           }
-          if (activeModule === 'follow-ups') {
-            quotePayload.followUp = { note: 'Sales follow-up logged', dueAt: new Date().toISOString() };
+          if (['orders', 'lead-conversion'].includes(activeModule)) {
+            quotePayload.order = { status: 'confirmed', amount: 100000 };
           }
-          if (activeModule === 'assigned-leads') quotePayload.status = 'in_review';
+          if (activeModule === 'tasks') {
+            quotePayload.followUp = { note: 'Sales task logged', dueAt: new Date().toISOString() };
+          }
+          if (activeModule === 'communication') {
+            quotePayload.note = 'Sales communication logged';
+          }
         }
 
         await operationsApi.updateQuote(kind, row.id, quotePayload);
@@ -1895,7 +1935,7 @@ export function OperationsDashboardPage({ kind }: { kind: DashboardKind }) {
     try {
       await operationsApi.createRecord(kind, {
         module,
-        title: kind === 'procurement' ? 'New Supplier Draft' : kind === 'sales' ? 'New Customer Draft' : 'New Operational Draft',
+        title: kind === 'procurement' ? 'New Supplier Draft' : kind === 'sales' ? 'New Sales Draft' : 'New Operational Draft',
         detail: selectedModule.helper,
         status: 'open',
         nextStep: 'Complete details',

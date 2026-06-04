@@ -160,7 +160,12 @@ export const updateLead = asyncHandler(async (req, res) => {
     }
   }
   if (leadTemperature) lead.leadTemperature = leadTemperature;
-  if (assignedTeam !== undefined) lead.assignedTeam = assignedTeam;
+  if (assignedTeam !== undefined) {
+    lead.assignedTeam = assignedTeam;
+    if (assignedTeam === 'sales' && !status) {
+      recordStatus(lead, 'Pricing', note || 'Lead assigned to sales', req.user._id);
+    }
+  }
   if (assignedTo !== undefined) {
     if (!assignedTo) {
       lead.assignedTo = null;
@@ -184,6 +189,7 @@ export const updateLead = asyncHandler(async (req, res) => {
       status: followUp.status || 'pending',
       createdBy: req.user._id,
     });
+    if (!status) recordStatus(lead, 'Follow-Up', note || 'Follow-up scheduled', req.user._id);
   }
   if (meeting?.note || meeting?.scheduledAt) {
     lead.meetings.push({
@@ -203,7 +209,7 @@ export const updateLead = asyncHandler(async (req, res) => {
   }
   if (order) {
     lead.order = { ...lead.order?.toObject?.(), ...order };
-    if (order.status === 'confirmed') recordStatus(lead, 'Order Confirmed', note || 'Order confirmed', req.user._id);
+    if (order.status === 'confirmed') recordStatus(lead, 'Won', note || 'Order confirmed', req.user._id);
     if (order.status === 'fulfilled') recordStatus(lead, 'Won', note || 'Order fulfilled', req.user._id);
   }
 
