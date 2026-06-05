@@ -92,7 +92,7 @@ export function AboutPage() {
                 <img
                   src="/imgs/about-page-logo.jpeg"
                   alt="Molten metal pouring in a foundry"
-                  className="absolute inset-0 h-full w-full object-cover object-right"
+                  className="absolute inset-0 h-full w-full object-cover object-[72%_center]"
                   decoding="async"
                   fetchPriority="high"
                 />
